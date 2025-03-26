@@ -41,6 +41,16 @@ class NewsServies {
     final response = await dio.get(
       'https://newsapi.org/v2/everything?q=$UserText&apiKey=${dotenv.get('NewsApi')}',
     );
+    Map<String, dynamic> jsonData = response.data;
+    List<dynamic> articles = jsonData['articles'];
+    if (articles.isNotEmpty) {
+      List<Article> articleList =
+          articles.map((jsonArticle) => Article.fromJson(jsonArticle)).toList();
+
+      _searchStreamController.add(articleList);
+    } else {
+      _searchStreamController.add([]);
+    }
   }
 
   // getBookMarked() {
