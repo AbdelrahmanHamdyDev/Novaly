@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:novaly/View/BookmarkScreen.dart';
 import 'package:novaly/View/HomeScreen.dart';
 import 'package:novaly/View/SearchScreen.dart';
 
@@ -15,12 +16,8 @@ class _pageViewControllerState extends State<pageViewController> {
   void _onTapped(int index) {
     setState(() {
       _currentIndex = index;
+      _pageController.jumpToPage(_currentIndex);
     });
-    _pageController.animateToPage(
-      index,
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
   }
 
   @override
@@ -28,26 +25,32 @@ class _pageViewControllerState extends State<pageViewController> {
     return Scaffold(
       body: PageView(
         controller: _pageController,
-        children: [homeScreen(), searchScreen()],
         onPageChanged: _onTapped,
+        children: [homeScreen(), searchScreen(), bookmarkScreen()],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        enableFeedback: true,
-        type: BottomNavigationBarType.shifting,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.newspaper, color: Colors.white),
-            label: "HeadLines",
-            backgroundColor: Colors.black,
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _currentIndex,
+        onDestinationSelected: _onTapped,
+        indicatorColor: Theme.of(
+          context,
+        ).colorScheme.primary.withValues(alpha: 0.3),
+        destinations: [
+          NavigationDestination(
+            icon: Icon(Icons.newspaper),
+            selectedIcon: Icon(Icons.newspaper),
+            label: '',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search, color: Colors.white),
-            label: "Search",
-            backgroundColor: Colors.black,
+          NavigationDestination(
+            icon: Icon(Icons.search),
+            selectedIcon: Icon(Icons.search),
+            label: '',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.bookmark_outline_rounded),
+            selectedIcon: Icon(Icons.bookmark),
+            label: '',
           ),
         ],
-        onTap: _onTapped,
       ),
     );
   }

@@ -101,7 +101,7 @@ class _SearchpageState extends State<searchScreen>
                 ),
               ),
             ),
-            SliverToBoxAdapter(child: SizedBox(height: 20)),
+            SliverToBoxAdapter(child: SizedBox(height: 10)),
             if (enteredText.isNotEmpty)
               StreamBuilder(
                 stream: newsServies.searchResultsStream,
@@ -124,13 +124,7 @@ class _SearchpageState extends State<searchScreen>
                   List<Article> searchArticles = snapshot.data!;
                   return SliverList(
                     delegate: SliverChildBuilderDelegate((context, index) {
-                      return ArticlePost(
-                        sourceId: searchArticles[index].sourceId,
-                        author: searchArticles[index].author,
-                        description: searchArticles[index].description,
-                        url: searchArticles[index].url,
-                        imageUrl: searchArticles[index].imageUrl,
-                      );
+                      return ArticlePost(article: searchArticles[index]);
                     }, childCount: searchArticles.length),
                   );
                 },

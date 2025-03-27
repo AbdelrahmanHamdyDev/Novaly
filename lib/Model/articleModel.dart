@@ -26,7 +26,7 @@ class Article {
           "https://i.pinimg.com/474x/b7/f0/db/b7f0db1455d5a1fcfdb41ef6a13822e2.jpg",
       imageUrl:
           jsonData['urlToImage'] ??
-          "https://cdn-useast1.kapwing.com/static/templates/grandma-finds-the-internet-meme-template-thumbnail-c43f97cb.webp",
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQauwIRNRadX_pWnwrvqusofrDqo4FxDtgt9Q&s",
     );
   }
 }

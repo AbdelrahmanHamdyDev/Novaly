@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:novaly/Controller/News_Servies.dart';
 import 'package:novaly/View/Widget/articlePost.dart';
 
@@ -10,9 +11,9 @@ class homeScreen extends StatefulWidget {
 
 class _homescreenState extends State<homeScreen>
     with AutomaticKeepAliveClientMixin<homeScreen> {
+  final _newsServies = NewsServies(Dio()).getHeadTitles();
   final ScrollController _scrollController = ScrollController();
   bool _showScrollButton = false;
-  var _newsServies = NewsServies(Dio()).getHeadTitles();
 
   @override
   void initState() {
@@ -62,14 +63,26 @@ class _homescreenState extends State<homeScreen>
         controller: _scrollController,
         slivers: [
           SliverAppBar(
-            expandedHeight: 150,
+            expandedHeight: MediaQuery.of(context).size.height / 2,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(
-                "Novaly",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.amber.shade400,
+              title: Container(
+                width: double.infinity,
+                height: double.infinity,
+                padding: EdgeInsets.only(bottom: 10.h),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(100.sp),
+                  ),
+                ),
+                alignment: Alignment.bottomCenter,
+                child: Text(
+                  "Novaly",
+                  style: TextStyle(
+                    fontSize: 22.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.surface,
+                  ),
                 ),
               ),
               centerTitle: true,
@@ -100,13 +113,7 @@ class _homescreenState extends State<homeScreen>
               var articles = snapshot.data!;
               return SliverList(
                 delegate: SliverChildBuilderDelegate((context, index) {
-                  return ArticlePost(
-                    sourceId: articles[index].sourceId,
-                    author: articles[index].author,
-                    description: articles[index].description,
-                    url: articles[index].url,
-                    imageUrl: articles[index].imageUrl,
-                  );
+                  return ArticlePost(article: articles[index]);
                 }, childCount: articles.length),
               );
             },
