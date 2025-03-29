@@ -63,7 +63,7 @@ class _homescreenState extends State<homeScreen>
         controller: _scrollController,
         slivers: [
           SliverAppBar(
-            expandedHeight: MediaQuery.of(context).size.height / 2,
+            expandedHeight: MediaQuery.of(context).size.height / 2.5,
             flexibleSpace: FlexibleSpaceBar(
               title: Container(
                 width: double.infinity,

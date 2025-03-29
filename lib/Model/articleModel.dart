@@ -14,7 +14,11 @@ class Article {
   });
 
   factory Article.fromJson(Map<String, dynamic> jsonData) {
-    var source = jsonData['source']?['id'] ?? jsonData['source']?['name'] ?? "";
+    var source =
+        jsonData['source']?['id'] ??
+        jsonData['source']?['name'] ??
+        jsonData['sourceId'] ??
+        "";
     return Article(
       sourceId: source,
       author:
@@ -28,5 +32,15 @@ class Article {
           jsonData['urlToImage'] ??
           "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQauwIRNRadX_pWnwrvqusofrDqo4FxDtgt9Q&s",
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "sourceId": sourceId,
+      "author": author,
+      "description": description,
+      "url": url,
+      "urlToImage": imageUrl,
+    };
   }
 }

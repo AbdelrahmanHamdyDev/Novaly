@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:novaly/Controller/riverpodManager.dart';
 import 'package:novaly/Model/articleModel.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 
-class ArticlePost extends StatelessWidget {
+class ArticlePost extends ConsumerWidget {
   const ArticlePost({required this.article});
 
   final Article article;
@@ -21,7 +23,9 @@ class ArticlePost extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    bool _IsMarked = ref.watch(bookMarkProvider).contains(article);
+
     return InkWell(
       onTap: () => openUrl(article.url),
       child: Card(
@@ -91,16 +95,32 @@ class ArticlePost extends StatelessWidget {
               Row(
                 children: [
                   IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.bookmark_outline_rounded),
+                    onPressed: () {
+                      bool result = ref
+                          .watch(bookMarkProvider.notifier)
+                          .togglewatchLaterList(article);
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            (result)
+                                ? "Added To BookMark"
+                                : "Removed From BookMark",
+                          ),
+                        ),
+                      );
+                    },
+                    icon: Icon(
+                      key: ValueKey(_IsMarked),
+                      (_IsMarked)
+                          ? Icons.bookmark_remove
+                          : Icons.bookmark_add_outlined,
+                    ),
                   ),
                   IconButton(
                     onPressed: () {
-                      String content = """📢 *Check this out!*
-                      📝 ${article.description}  
-                      
-                      🔗 Read more: ${article.url}
-                          """;
+                      String content =
+                          "📢 *Check this out!*   📝${article.description}   🔗Read more: ${article.url}";
                       Share.share(
                         content,
                         subject: "Interesting Article, I would like to share",
