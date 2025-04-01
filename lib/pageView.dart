@@ -1,9 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:novaly/View/BookmarkScreen.dart';
 import 'package:novaly/View/HomeScreen.dart';
 import 'package:novaly/View/SearchScreen.dart';
 
 class pageViewController extends StatefulWidget {
+  const pageViewController({super.key, required this.UserData});
+
+  final FirebaseAuth UserData;
   @override
   State<pageViewController> createState() => _pageViewControllerState();
 }
@@ -12,6 +16,11 @@ class _pageViewControllerState extends State<pageViewController> {
   final PageController _pageController = PageController();
 
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   void _onTapped(int index) {
     setState(() {
@@ -26,7 +35,11 @@ class _pageViewControllerState extends State<pageViewController> {
       body: PageView(
         controller: _pageController,
         onPageChanged: _onTapped,
-        children: [homeScreen(), searchScreen(), bookmarkScreen()],
+        children: [
+          homeScreen(name: widget.UserData.currentUser!.displayName!),
+          searchScreen(),
+          bookmarkScreen(),
+        ],
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,

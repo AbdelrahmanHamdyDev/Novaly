@@ -5,6 +5,9 @@ import 'package:novaly/Controller/News_Servies.dart';
 import 'package:novaly/View/Widget/articlePost.dart';
 
 class homeScreen extends StatefulWidget {
+  const homeScreen({super.key, required this.name});
+
+  final String name;
   @override
   State<homeScreen> createState() => _homescreenState();
 }
@@ -65,27 +68,45 @@ class _homescreenState extends State<homeScreen>
           SliverAppBar(
             expandedHeight: MediaQuery.of(context).size.height / 2.5,
             flexibleSpace: FlexibleSpaceBar(
-              title: Container(
-                width: double.infinity,
-                height: double.infinity,
-                padding: EdgeInsets.only(bottom: 10.h),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(100.sp),
+              background: Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(100.sp),
+                      ),
+                    ),
                   ),
-                ),
-                alignment: Alignment.bottomCenter,
-                child: Text(
-                  "Novaly",
-                  style: TextStyle(
-                    fontSize: 22.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.surface,
+                  Padding(
+                    padding: EdgeInsets.only(top: 50.h, left: 15.w),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Welcome ${widget.name}",
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.surface,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Text(
+                      "Novaly",
+                      style: TextStyle(
+                        fontSize: 36.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.surface,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              centerTitle: true,
             ),
           ),
           FutureBuilder(
