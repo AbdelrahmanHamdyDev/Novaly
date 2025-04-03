@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:novaly/Controller/firebase.dart';
@@ -15,7 +14,7 @@ class signScreen extends StatefulWidget {
 
 class _signScreenState extends State<signScreen> {
   final _formKey = GlobalKey<FormState>();
-  final firebase = fireBase();
+  final firebase = Firebase_Auth();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _userNameController = TextEditingController();
@@ -42,10 +41,7 @@ class _signScreenState extends State<signScreen> {
 
       if (errorMessage == null) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder:
-                (ctx) => pageViewController(UserData: firebase.fireBaseData),
-          ),
+          MaterialPageRoute(builder: (ctx) => pageViewController()),
         );
       } else {
         ScaffoldMessenger.of(context).clearSnackBars();
@@ -76,7 +72,27 @@ class _signScreenState extends State<signScreen> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    Image.asset('assets/logo.png', scale: 2.5.sp),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 20.h),
+                      width: 180.w,
+                      height: 180.h,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/logo.png"),
+                        ),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(70),
+                      ),
+                    ),
+                    Text("Welcome To", style: TextStyle(fontSize: 24.sp)),
+                    Text(
+                      "Novaly",
+                      style: TextStyle(
+                        fontSize: 32.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 40),
                     if (!is_SignIn)
                       TextFormField(
                         controller: _userNameController,
@@ -140,33 +156,30 @@ class _signScreenState extends State<signScreen> {
 
                     SizedBox(height: 20),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            Theme.of(context).colorScheme.primaryContainer,
+                      ),
                       onPressed: () {
                         _sign(is_SignIn);
                       },
-                      child: Text(is_SignIn ? "SignIn" : "SignUp"),
+                      child: Text(is_SignIn ? "Enter" : "Register"),
                     ),
-                    if (is_SignIn)
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (ctx) => signScreen(type: "u"),
-                            ),
-                          );
-                        },
-                        child: Text("Create new account"),
-                      ),
-                    if (!is_SignIn)
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (ctx) => signScreen(type: "i"),
-                            ),
-                          );
-                        },
-                        child: Text("Have an email?"),
-                      ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder:
+                                (ctx) =>
+                                    signScreen(type: (is_SignIn) ? "u" : "i"),
+                          ),
+                        );
+                      },
+                      child:
+                          (is_SignIn)
+                              ? Text("Create new account?")
+                              : Text("Have an email?"),
+                    ),
                   ],
                 ),
               ),

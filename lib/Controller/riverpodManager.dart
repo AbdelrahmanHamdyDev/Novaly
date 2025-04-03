@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:novaly/Controller/firebase.dart';
 import 'package:novaly/Model/articleModel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,19 +9,19 @@ class bookMarkNotify extends StateNotifier<List<Article>> {
   }
 
   Future<void> loadBookMark() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String? jsonString = prefs.getString('BookMark');
-    if (jsonString != null) {
-      List<dynamic> jsonData = jsonDecode(jsonString);
-      state = jsonData.map((json) => Article.fromJson(json)).toList();
+    var jsonData = await Firebase_Store().getUserData();
+
+    if (jsonData.isNotEmpty) {
+      state = jsonData.map((data) => Article.fromJson(data)).toList();
+    } else {
+      state = [];
     }
   }
 
   Future<void> saveBookMark() async {
-    final prefs = await SharedPreferences.getInstance();
     final List<Map<String, dynamic>> jsonData =
         state.map((article) => article.toJson()).toList();
-    prefs.setString('BookMark', jsonEncode(jsonData));
+    Firebase_Store().addNewUser(jsonEncode(jsonData));
   }
 
   bool togglewatchLaterList(Article item) {

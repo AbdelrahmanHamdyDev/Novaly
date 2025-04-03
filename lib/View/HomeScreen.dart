@@ -2,12 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:novaly/Controller/News_Servies.dart';
+import 'package:novaly/Controller/firebase.dart';
 import 'package:novaly/View/Widget/articlePost.dart';
 
 class homeScreen extends StatefulWidget {
-  const homeScreen({super.key, required this.name});
-
-  final String name;
   @override
   State<homeScreen> createState() => _homescreenState();
 }
@@ -17,6 +15,7 @@ class _homescreenState extends State<homeScreen>
   final _newsServies = NewsServies(Dio()).getHeadTitles();
   final ScrollController _scrollController = ScrollController();
   bool _showScrollButton = false;
+  final _UserName = firebaseAuth.currentUser!.displayName!;
 
   @override
   void initState() {
@@ -85,7 +84,7 @@ class _homescreenState extends State<homeScreen>
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        "Welcome ${widget.name}",
+                        "Welcome ${_UserName}",
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.bold,
