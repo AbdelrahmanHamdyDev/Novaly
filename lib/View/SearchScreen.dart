@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:novaly/Controller/News_Servies.dart';
 import 'package:novaly/Model/articleModel.dart';
 import 'package:novaly/View/Widget/articlePost.dart';
@@ -68,14 +69,14 @@ class _SearchpageState extends State<searchScreen>
         child: CustomScrollView(
           controller: _scrollController,
           slivers: [
-            SliverToBoxAdapter(child: SizedBox(height: 20)),
+            SliverToBoxAdapter(child: SizedBox(height: 20.h)),
             SliverAppBar(
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: true,
-                titlePadding: const EdgeInsets.only(
-                  left: 30,
-                  right: 30,
-                  bottom: 10,
+                titlePadding: EdgeInsets.only(
+                  left: 30.w,
+                  right: 30.w,
+                  bottom: 10.h,
                 ),
                 title: SearchBar(
                   controller: _controller,
@@ -101,7 +102,7 @@ class _SearchpageState extends State<searchScreen>
                 ),
               ),
             ),
-            SliverToBoxAdapter(child: SizedBox(height: 10)),
+            SliverToBoxAdapter(child: SizedBox(height: 10.h)),
             if (enteredText.isNotEmpty)
               StreamBuilder(
                 stream: newsServies.searchResultsStream,

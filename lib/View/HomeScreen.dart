@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:novaly/Controller/News_Servies.dart';
 import 'package:novaly/Controller/firebase.dart';
 import 'package:novaly/View/Widget/articlePost.dart';
+import 'package:novaly/View/signScreen.dart';
 
 class homeScreen extends StatefulWidget {
   @override
@@ -65,37 +66,61 @@ class _homescreenState extends State<homeScreen>
         controller: _scrollController,
         slivers: [
           SliverAppBar(
-            expandedHeight: MediaQuery.of(context).size.height / 2.5,
+            expandedHeight: MediaQuery.of(context).size.height / 2,
             flexibleSpace: FlexibleSpaceBar(
-              background: Stack(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                      borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(100.sp),
+              background: Container(
+                width: double.infinity,
+                height: double.infinity,
+                margin: EdgeInsets.only(bottom: 10.h),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(100.sp),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 25.h,
+                        horizontal: 15.w,
+                      ),
+                      child: Row(
+                        spacing: 10.w,
+                        children: [
+                          CircleAvatar(
+                            backgroundImage: NetworkImage(
+                              firebaseAuth.currentUser?.photoURL ??
+                                  "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg",
+                            ),
+                          ),
+                          Text(
+                            "Welcome ${_UserName}",
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.surface,
+                            ),
+                          ),
+                          Spacer(),
+                          IconButton(
+                            color:
+                                Theme.of(context).colorScheme.primaryContainer,
+                            onPressed: () async {
+                              firebaseAuth.signOut();
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) => signScreen(type: "i"),
+                                ),
+                              );
+                            },
+                            icon: Icon(Icons.logout),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 50.h, left: 15.w),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        "Welcome ${_UserName}",
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.surface,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Text(
+                    Spacer(),
+                    Text(
                       "Novaly",
                       style: TextStyle(
                         fontSize: 36.sp,
@@ -103,8 +128,8 @@ class _homescreenState extends State<homeScreen>
                         color: Theme.of(context).colorScheme.surface,
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

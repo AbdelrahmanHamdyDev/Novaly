@@ -25,14 +25,16 @@ class _signScreenState extends State<signScreen> {
       final userEmail = _emailController.text;
       final userPassword = _passwordController.text;
       final userName = _userNameController.text;
-      bool res = false;
 
       String? errorMessage;
 
       if (SignIn) {
-        errorMessage = await firebase.signInUser(userEmail, userPassword);
+        errorMessage = await firebase.Login_With_Email_And_Password(
+          userEmail,
+          userPassword,
+        );
       } else {
-        errorMessage = await firebase.registerUser(
+        errorMessage = await firebase.register_With_Email_And_Password(
           userEmail,
           userPassword,
           userName,
@@ -74,8 +76,8 @@ class _signScreenState extends State<signScreen> {
                   children: [
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 20.h),
-                      width: 180.w,
-                      height: 180.h,
+                      width: 150.w,
+                      height: 150.h,
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage("assets/logo.png"),
@@ -84,15 +86,15 @@ class _signScreenState extends State<signScreen> {
                         borderRadius: BorderRadius.circular(70),
                       ),
                     ),
-                    Text("Welcome To", style: TextStyle(fontSize: 24.sp)),
+                    Text("Welcome To", style: TextStyle(fontSize: 18.sp)),
                     Text(
                       "Novaly",
                       style: TextStyle(
-                        fontSize: 32.sp,
+                        fontSize: 28.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 40),
+                    SizedBox(height: 20.h),
                     if (!is_SignIn)
                       TextFormField(
                         controller: _userNameController,
@@ -107,7 +109,7 @@ class _signScreenState extends State<signScreen> {
                           return null;
                         },
                       ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 10.h),
                     TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
@@ -123,7 +125,7 @@ class _signScreenState extends State<signScreen> {
                       },
                     ),
 
-                    SizedBox(height: 20),
+                    SizedBox(height: 10.h),
                     TextFormField(
                       controller: _passwordController,
                       obscureText: _obscurePassword,
@@ -154,7 +156,7 @@ class _signScreenState extends State<signScreen> {
                       },
                     ),
 
-                    SizedBox(height: 20),
+                    SizedBox(height: 10.h),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
@@ -180,6 +182,21 @@ class _signScreenState extends State<signScreen> {
                               ? Text("Create new account?")
                               : Text("Have an email?"),
                     ),
+                    if (is_SignIn)
+                      Column(
+                        children: [
+                          Divider(),
+                          Text("OR"),
+                          SizedBox(height: 10.h),
+                          _buildSocialSignIn(
+                            context,
+                            logourl: "assets/Google.png",
+                            Name: "Google",
+                            ontap:
+                                () async => await firebase.Login_With_Google(),
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),
@@ -190,3 +207,46 @@ class _signScreenState extends State<signScreen> {
     );
   }
 }
+
+Widget _buildSocialSignIn(
+  BuildContext ctx, {
+  required String logourl,
+  required String Name,
+  required Future<bool> Function() ontap,
+}) => ElevatedButton(
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Theme.of(ctx).colorScheme.secondaryContainer,
+  ),
+  onPressed: () async {
+    try {
+      final success = await ontap();
+      if (success) {
+        Navigator.of(ctx).pushReplacement(
+          MaterialPageRoute(builder: (ctx) => pageViewController()),
+        );
+      } else {
+        ScaffoldMessenger.of(
+          ctx,
+        ).showSnackBar(SnackBar(content: Text("Failed To Login Using $Name")));
+      }
+    } catch (e) {
+      if (ctx.mounted) {
+        ScaffoldMessenger.of(
+          ctx,
+        ).showSnackBar(SnackBar(content: Text("Error: ${e.toString()}")));
+      }
+    }
+  },
+  child: Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      SizedBox(
+        width: 20.w,
+        height: 20.h,
+        child: Image.asset(logourl, fit: BoxFit.contain),
+      ),
+      SizedBox(width: 10.w),
+      Text("Sign With $Name"),
+    ],
+  ),
+);
