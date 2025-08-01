@@ -1,0 +1,49 @@
+name: novaly
+description: "Novaly is a modern and responsive Flutter news app that delivers the latest headlines, supports searching, bookmarking, and dynamic theming."
+publish_to: "none"
+version: 2.0.0+1
+
+environment:
+  sdk: ^3.7.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # UI and Theming
+  cupertino_icons: ^1.0.8
+  dynamic_color: ^1.7.0
+  flutter_screenutil: ^5.9.3
+
+  # State Management
+  flutter_riverpod: ^2.6.1
+
+  # API and Network
+  dio: ^5.8.0+1
+  flutter_dotenv: ^5.2.1
+
+  # Navigation & User Interaction
+  url_launcher: ^6.3.1
+  share_plus: ^10.1.4
+  flutter_card_swiper: ^7.0.2
+
+  # Splash Screen
+  flutter_native_splash: ^2.4.5
+
+  #FireBase Auth/Store
+  firebase_core: ^3.12.1
+  firebase_auth: ^5.5.1
+  cloud_firestore: ^5.6.6
+  google_sign_in: ^6.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - lib/.env
+    - assets/
